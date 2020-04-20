@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Bill from './Components/Bill'
+import Barcode from './Components/Barcode'
+import Images from './Components/Images'
+import {Container, Row, Col} from "react-bootstrap"
+import 'bootstrap/dist/css/bootstrap.min.css';   
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <Container fluid>
+    <Row>
+      <Col xs={3} className="barcode">
+          <Barcode/>
+      </Col>
+      <Col className="images">
+          <Images/>
+      </Col>
+      <Col xs={3} className="bill">
+          <Bill/>
+      </Col>
+    </Row>
+  </Container>
   );
 }
 

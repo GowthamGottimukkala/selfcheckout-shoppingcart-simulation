@@ -4,7 +4,7 @@
   "description": "This is a simulation of the actual product",
   "author": "Team Torque",
   "main": "public/electron.js",
-  "build":{
+  "build": {
     "appId": "superkart"
   },
   "homepage": "./",
@@ -43,9 +43,11 @@
     ]
   },
   "devDependencies": {
+    "bootstrap": "^4.4.1",
     "concurrently": "^5.1.0",
     "electron": "^8.2.3",
     "electron-builder": "^22.4.1",
+    "react-bootstrap": "^1.0.0",
     "wait-on": "^4.0.2"
   }
 }
