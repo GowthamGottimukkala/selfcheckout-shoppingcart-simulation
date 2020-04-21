@@ -14,16 +14,16 @@ class Images extends Component {
                 <h1>Select one image</h1>
                 <Container className="gallery">
                     <Row>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/9vbattery.jpeg')"}}></div>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/fogg.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/9vbattery.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/fogg.jpeg')"}}></div>
                     </Row>
                     <Row>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/redlabel.jpeg')"}}></div>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/medimix.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/redlabel.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/medimix.jpeg')"}}></div>
                     </Row>
                     <Row>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/goodday.jpeg')"}}></div>
-                        <div class="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/yippee.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/goodday.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/yippee.jpeg')"}}></div>
                     </Row>
                 </Container>
             </div>

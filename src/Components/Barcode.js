@@ -5,16 +5,26 @@ import ReactDOM from "react-dom"
 class Barcode extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.changeTitle = this.changeTitle.bind(this);
+        this.state = { 
+            dropdownTitle : "Items"
+         }
+    }
+    changeTitle(e) {
+        this.setState({
+            dropdownTitle: e.currentTarget.textContent
+        })
     }
     render() { 
+        const dropdownItems = this.props.availableitems.map((item)=>{
+        if(item.display)
+            return <Dropdown.Item key={item.id} href="#/action-1" onClick={(e)=>{this.props.barcodeClickFunction(e);this.changeTitle(e)}}>{item.name}</Dropdown.Item>
+        })
         return ( 
             <div className="actualbarcode">
                 <h1>Scan one of these items</h1>
-                <DropdownButton alignCenter id="dropdown-basic-button" title="Items">
-                    <Dropdown.Item href="#/action-1">tea</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">soap</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">spray</Dropdown.Item>
+                <DropdownButton id="dropdown-basic-button" title={this.state.dropdownTitle}>
+                    {dropdownItems}
                 </DropdownButton>
             </div>
          );

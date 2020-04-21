@@ -8,6 +8,15 @@ class Bill extends Component {
         this.state = {  }
     }
     render() { 
+      const billItems = this.props.billeditems.map((item)=>{
+        return(
+          <tr>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td>{item.price}</td>
+          </tr>
+        )
+      })
         return ( 
             <div className="actualbill">
               <h1>Bill</h1>
@@ -20,16 +29,7 @@ class Bill extends Component {
                    </tr>
                  </thead>
                  <tbody>
-                   <tr>
-                     <td>1</td>
-                     <td>Redlabel Tea</td>
-                     <td>65rs</td>
-                   </tr>
-                   <tr>
-                     <td>2</td>
-                     <td>Medimix soap</td>
-                     <td>30rs</td>
-                   </tr>
+                    {billItems}
                  </tbody>
             </Table>
             </div>
