@@ -3,7 +3,7 @@ import './App.css';
 import Bill from './Components/Bill'
 import Barcode from './Components/Barcode'
 import Images from './Components/Images'
-import {Container, Row, Col} from "react-bootstrap"
+import {Container, Row, Col, Button} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';   
 
 class App extends Component {
@@ -12,28 +12,45 @@ class App extends Component {
     this.handleBarcodeClick = this.handleBarcodeClick.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
     this.state = { 
-      barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:'hw',name:'9v Battery hw',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}, {id:"yippe",name:'Yippee noodles',display:true}],
+      barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:'hw',name:'9v Battery hw',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}, {id:"yippee",name:'Yippee noodles',display:true}],
       bill : [],
       images : [0,1,2,3,4,5],
-      barcodeSelectedItem : "",
-      imageSelected : "",
+      barcodeSelectedItem : undefined,
+      imageSelected : undefined,
      }
   }
 
-  handleBarcodeClick(e){
+  handleBarcodeClick(id){
     this.setState({
-      barcodeSelectedItem : e.currentTarget.textContent
+      barcodeSelectedItem : id
     },function () {
       console.log(this.state.barcodeSelectedItem);
   })
   }
 
-  handleImageClick(e){
-    console.log(e.target)
-  }
+  handleImageClick(id){
+    if(this.state.imageSelected === id){
+    this.setState((prevState)=>{
+      return {
+        ...prevState,
+      imageSelected : undefined
+      }
+    },function () {
+      console.log(this.state);
+  })}
+    else{
+    this.setState((prevState)=>{
+      return {
+        ...prevState,
+      imageSelected : id
+      }
+    },function () {
+      console.log(this.state);
+  })}
+}
 
   handleSubmitClick(){
-    // here we use the state.selecteditem and image received from <Images/> to perform validation using AWS and weights then
+    // here we use the state.barcodeselecteditem and state.imageSelected to perform validation using AWS and weights then
     // 1. Display "Success" or "Place again" and hide Images Component
     // 2. If "Success" Add state.bill with validated item with the help of csv
     // 3. If "Success" Update state.barcode.display for all items according to the images available
@@ -50,6 +67,9 @@ class App extends Component {
         </Col>
         <Col className="images">
             <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick} submitClickFunction = {this.handleSubmitClick} />
+            {this.state.barcodeSelectedItem!==undefined && this.state.imageSelected!==undefined &&
+              <Button onClick={this.handleSubmitClick} >Add to Cart</Button>
+            }
         </Col>
         <Col xs={3} className="bill">
             <Bill billeditems = {this.state.bill}/>

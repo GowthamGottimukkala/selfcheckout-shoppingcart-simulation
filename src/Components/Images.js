@@ -25,7 +25,7 @@ class Images extends Component {
     render() { 
         const images = this.importAll(require.context('../images/', false));
         const gallery = this.props.imageFiles.map((id)=>{
-            return <img key= {id} className="imge" src={images[id]} onClick = {(e)=>{this.changeCSS(e); this.props.imageClickFunction(e)}} />;
+            return <img key= {id} className="imge" src={images[id]} onClick = {(e)=>{this.changeCSS(e); this.props.imageClickFunction(id)}} />;
         })
         return ( 
             <div className="actualimages">
@@ -38,15 +38,3 @@ class Images extends Component {
     }
 }
 export default Images;
-
-
-
-
-                    {/* <Row>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/redlabel.jpeg')"}}></div>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/medimix.jpeg')"}}></div>
-                    </Row>
-                    <Row>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/goodday.jpeg')"}}></div>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/yippee.jpeg')"}}></div>
-                    </Row> */}

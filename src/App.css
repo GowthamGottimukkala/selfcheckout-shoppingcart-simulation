@@ -8,7 +8,7 @@
   
 }
 .images{
-
+  text-align: center;
 }
 .bill{
   
@@ -19,7 +19,7 @@
 }
 
 #dropdown-basic-button{
-  width: 50%;
+  width: auto;
 }
 .gallery {
   padding: 2em;

@@ -18,11 +18,11 @@ class Barcode extends Component {
     render() { 
         const dropdownItems = this.props.availableitems.map((item)=>{
         if(item.display)
-            return <Dropdown.Item key={item.id} href="#/action-1" onClick={(e)=>{this.props.barcodeClickFunction(e);this.changeTitle(e)}}>{item.name}</Dropdown.Item>
+            return <Dropdown.Item key={item.id} href="#/action-1" onClick={(e)=>{this.props.barcodeClickFunction(item.id);this.changeTitle(e)}}>{item.name}</Dropdown.Item>
         })
         return ( 
             <div className="actualbarcode">
-                <h1>Scan one of these items</h1>
+                <h1>Scan new item</h1>
                 <DropdownButton id="dropdown-basic-button" title={this.state.dropdownTitle}>
                     {dropdownItems}
                 </DropdownButton>
