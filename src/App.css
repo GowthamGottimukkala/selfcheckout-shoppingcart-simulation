@@ -25,13 +25,26 @@
   padding: 2em;
 }
 
-.img {
-    display: inline-block;
+.imge {
     width:  200px;
     height: 200px;
-    background-size: cover;
+    object-fit: cover;
     outline-style: solid;
+    margin: 1em;
 }
+
+.imge:hover{
+  width:  205px;
+  height: 205px;
+  outline-width: 8px;
+}
+
+.clicked {
+  width:  205px;
+  height: 205px;
+  outline-width: 8px;
+}
+
 .row{
 justify-content: center;
 }

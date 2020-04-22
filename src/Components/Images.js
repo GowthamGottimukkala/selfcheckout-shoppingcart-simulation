@@ -8,26 +8,45 @@ class Images extends Component {
         super(props);
         this.state = {  }
     }
+    importAll(r) {
+        return r.keys().map(r);
+      }
+    changeCSS(e) {
+        if(e.target.className.includes("clicked"))
+            e.target.className = "imge"
+        else{
+            const elements = document.getElementsByClassName("imge")
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].classList.remove('clicked');
+             }
+            e.target.className += " clicked"
+        }
+    }
     render() { 
+        const images = this.importAll(require.context('../images/', false));
+        const gallery = this.props.imageFiles.map((id)=>{
+            return <img key= {id} className="imge" src={images[id]} onClick = {(e)=>{this.changeCSS(e); this.props.imageClickFunction(e)}} />;
+        })
         return ( 
             <div className="actualimages">
                 <h1>Select one image</h1>
                 <Container className="gallery">
-                    <Row>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/9vbattery.jpeg')"}}></div>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/fogg.jpeg')"}}></div>
-                    </Row>
-                    <Row>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/redlabel.jpeg')"}}></div>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/medimix.jpeg')"}}></div>
-                    </Row>
-                    <Row>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/goodday.jpeg')"}}></div>
-                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/yippee.jpeg')"}}></div>
-                    </Row>
+                    {gallery}
                 </Container>
             </div>
          );
     }
 }
 export default Images;
+
+
+
+
+                    {/* <Row>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/redlabel.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/medimix.jpeg')"}}></div>
+                    </Row>
+                    <Row>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/goodday.jpeg')"}}></div>
+                        <div className="img" style={{backgroundImage:"url('/home/gowtham/Documents/Sem-6/PDP/Lowes/superkart-react-electron/src/images/yippee.jpeg')"}}></div>
+                    </Row> */}
