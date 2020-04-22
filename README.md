@@ -2,10 +2,10 @@
 This is a simulation for the product we are making - a Self-checkout Shopping cart
 ### Install Dependencies
 
-```npm install```
+```yarn```
 ### Run the app
 
-```npm run start```
+```yarn start```
 ### Build the app
 
-```npm run build```
+```yarn build```
