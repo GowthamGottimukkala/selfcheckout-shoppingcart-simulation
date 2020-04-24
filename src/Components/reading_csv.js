@@ -1,25 +1,5 @@
-function csvJSON(csv){
-
-    var lines=csv.split("\n");
-  
-    var result = [];
-  
-    var headers=lines[0].split(",");
-  
-    for(var i=1;i<lines.length;i++){
-  
-        var obj = {};
-        var currentline=lines[i].split(",");
-  
-        for(var j=0;j<headers.length;j++){
-            obj[headers[j]] = currentline[j];
-        }
-  
-        result.push(obj);
-  
-    }
-    
-    return JSON.stringify(result);
-  }
-
-  export default csvJSON;
+function csvJSON(){
+    var obj =[{"key":"1","ID":"redlabel","Item":"Tea Powder","Weight":"100","Price":"60"},{"key":"2","ID":"Medimix","Item":"Soap","Weight":"125","Price":"40"},{"key":"3","ID":"fogg","Item":"Body spray","Weight":"100","Price":"170"},{"key":"4","ID":"goodday","Item":"Buttercookies","Weight":"75","Price":"10"}];
+    return JSON.stringify(obj)
+} 
+export default csvJSON;
