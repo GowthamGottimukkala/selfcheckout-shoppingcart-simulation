@@ -4,7 +4,8 @@ import Bill from './Components/Bill'
 import Barcode from './Components/Barcode'
 import Images from './Components/Images'
 import {Container, Row, Col, Button} from "react-bootstrap"
-import 'bootstrap/dist/css/bootstrap.min.css';   
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import read from "./readfiles"  
 
 class App extends Component {
   constructor(props) {  
@@ -18,7 +19,18 @@ class App extends Component {
       images : [0,1,2,3,4,5],
       barcodeSelectedItem : undefined,
       imageSelected : undefined,
+      filenames: undefined
      }
+  }
+
+  componentDidMount() {
+    read((result) => {
+      this.setState({
+        filenames : result
+      },function(){
+        console.log(this.state.filenames)
+      });
+    });
   }
 
   handleBarcodeClick(id){
@@ -69,9 +81,6 @@ class App extends Component {
     barcodeCombinedOutput += this.state.barcodeSelectedItem
     console.log(barcodeCombinedOutput)
 
-    const images = this.importAll(require.context('./images/', false));
-    console.log(images[this.state.imageSelected])
-    
   }
 
   render() { 
