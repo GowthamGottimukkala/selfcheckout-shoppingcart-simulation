@@ -12,7 +12,7 @@ class App extends Component {
     this.handleBarcodeClick = this.handleBarcodeClick.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
     this.state = { 
-      barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:'hw',name:'9v Battery hw',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}, {id:"yippee",name:'Yippee noodles',display:true}],
+      barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}],
       bill : [],
       images : [0,1,2,3,4,5],
       barcodeSelectedItem : undefined,
