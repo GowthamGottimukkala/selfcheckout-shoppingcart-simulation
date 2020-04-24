@@ -10,8 +10,8 @@ class Bill extends Component {
     render() { 
       const billItems = this.props.billeditems.map((item)=>{
         return(
-          <tr>
-            <td>{item.id}</td>
+          <tr key={item.key}>
+            <td>{item.key}</td>
             <td>{item.name}</td>
             <td>{item.price}</td>
           </tr>
@@ -23,7 +23,7 @@ class Bill extends Component {
             <Table striped bordered hover responsive>
                  <thead>
                    <tr>
-                     <th>Id</th>
+                     <th>Key</th>
                      <th>Item</th>
                      <th>Price</th>
                    </tr>

@@ -11,9 +11,10 @@ class App extends Component {
     super(props);
     this.handleBarcodeClick = this.handleBarcodeClick.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.state = { 
       barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}],
-      bill : [],
+      bill : [{id:"fogg",key:1,name:"Bodyspray",price:100}],
       images : [0,1,2,3,4,5],
       barcodeSelectedItem : undefined,
       imageSelected : undefined,
@@ -49,6 +50,10 @@ class App extends Component {
   })}
 }
 
+  importAll(r) {
+    return r.keys().map(r);
+  }
+
   handleSubmitClick(){
     // here we use the state.barcodeselecteditem and state.imageSelected to perform validation using AWS and weights then
     // 1. Display "Success" or "Place again" and hide Images Component
@@ -56,6 +61,17 @@ class App extends Component {
     // 3. If "Success" Update state.barcode.display for all items according to the images available
     // 4. If "Success" Call the function to list all the available images having the items present in the bill (and state.selectedItem is not needed
     //    because to show fraud detection cases) ,then update state.image and unhide Images component
+    var barcodeCombinedOutput = ""
+    this.state.bill.forEach(billeditem=>{
+      barcodeCombinedOutput += billeditem.id
+      barcodeCombinedOutput += "+"
+    })
+    barcodeCombinedOutput += this.state.barcodeSelectedItem
+    console.log(barcodeCombinedOutput)
+
+    const images = this.importAll(require.context('./images/', false));
+    console.log(images[this.state.imageSelected])
+    
   }
 
   render() { 
