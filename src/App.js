@@ -5,7 +5,8 @@ import Barcode from './Components/Barcode'
 import Images from './Components/Images'
 import {Container, Row, Col, Button} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-import filenames from "./readfiles"
+import filenames from "./Components/readfiles"
+import itemscsv from "./Components/reading_csv"
 
 class App extends Component {
   constructor(props) {  
@@ -13,10 +14,12 @@ class App extends Component {
     this.handleBarcodeClick = this.handleBarcodeClick.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.addToCartButton = document.getElementById("addtocart")
+    this.loadingButton = document.getElementById("loading")
     this.state = { 
       barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}],
-      bill : [{id:"fogg",key:1,name:"Bodyspray",price:100}],
-      images : [0,1,2,3,4,5],
+      bill : [],
+      images : [5,7,13,14],
       barcodeSelectedItem : undefined,
       imageSelected : undefined,
      }
@@ -51,13 +54,16 @@ class App extends Component {
 }
 
   // here we use the state.barcodeselecteditem and state.imageSelected to perform validation using AWS and weights then
-  // 1. Display "Success" or "Place again" and hide Images Component
-  // 2. If "Success" Add state.bill with validated item with the help of csv
+  // 1. Display "Success" or "Place again" and hide Images Component - Done
+  // 2. If "Success" Add state.bill with validated item - Done
   // 3. If "Success" Update state.barcode.display for all items according to the images available
   // 4. If "Success" Call the function to list all the available images having the items present in the bill (and state.selectedItem is not needed
   //    because to show fraud detection cases) ,then update state.image and unhide Images component
-  
-  handleSubmitClick() {
+
+  async handleSubmitClick() {
+    // this.addToCartButton.className += "hide"
+    // this.loadingButton.classList.remove("hide")
+    console.log(itemscsv)
     var barcodeCombinedOutput = []
     var imageName = undefined
     this.state.bill.forEach(billeditem=>{
@@ -66,7 +72,28 @@ class App extends Component {
     barcodeCombinedOutput.push(this.state.barcodeSelectedItem)
     console.log(barcodeCombinedOutput)
     imageName = filenames[this.state.imageSelected].name
-    console.log(imageName)
+    var awsResult = await window["upload"](imageName)
+    // this.addToCartButton.classList.remove("hide")
+    // this.loadingButton.className += "hide"
+    console.log(awsResult)
+    if(awsResult.sort().join(',')=== barcodeCombinedOutput.sort().join(',')){
+      alert('Items succesfully validated');
+      for(let i=0;i<itemscsv.length;i++){
+        if(this.state.barcodeSelectedItem == itemscsv[i].id){
+          this.setState((prevState)=>{
+            return {
+              ...prevState,
+              bill: [...prevState.bill, {key:itemscsv[i].key,name:itemscsv[i].name,price:itemscsv[i].price,id:itemscsv[i].id}]
+            }
+          },function(){
+            console.log(this.state.bill)
+          })
+          break;
+        }
+      }
+    }
+    else 
+      alert('Fraud Detected. Place again');
   }
 
   render() { 
@@ -79,7 +106,10 @@ class App extends Component {
         <Col className="images">
             <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick}/>
             {this.state.barcodeSelectedItem!==undefined && this.state.imageSelected!==undefined &&
-              <Button onClick={this.handleSubmitClick} >Add to Cart</Button>
+              <div>
+              <Button className = "button" id="addtocart" onClick={this.handleSubmitClick} >Add to Cart</Button>
+              {/* <Button className = "button hide" id="loading">Loading..</Button> */}
+              </div>
             }
         </Col>
         <Col xs={3} className="bill">

@@ -48,3 +48,8 @@
 .row{
 justify-content: center;
 }
+
+
+.hide{
+  visibility: hidden;
+}
