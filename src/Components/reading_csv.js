@@ -19,8 +19,7 @@ function csvJSON(csv){
   
     }
     
-    //return result; //JavaScript object
-    return JSON.stringify(result); //JSON
+    return JSON.stringify(result);
   }
 
-  export default csvJSON
+  export default csvJSON;
