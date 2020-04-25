@@ -5,8 +5,8 @@ import Barcode from './Components/Barcode'
 import Images from './Components/Images'
 import {Container, Row, Col, Button} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-import filenames from "./Components/readfiles"
-import itemscsv from "./Components/reading_csv"
+import filenames from "./Components/imgfilenamesobj"
+import itemscsv from "./Components/itemsobj"
 
 class App extends Component {
   constructor(props) {  
@@ -14,14 +14,17 @@ class App extends Component {
     this.handleBarcodeClick = this.handleBarcodeClick.bind(this);
     this.handleImageClick = this.handleImageClick.bind(this);
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
-    this.addToCartButton = document.getElementById("addtocart")
-    this.loadingButton = document.getElementById("loading")
+    this.changeTitle = this.changeTitle.bind(this);
     this.state = { 
-      barcode : [{id:'fogg',name:'Fogg bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'Redlabel Tea powder',display:true}, {id:"goodday",name:'Goodday buttercookies',display:true}],
+      barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
+      dropDownTitle : "Items",
       bill : [],
       images : [5,7,13,14],
       barcodeSelectedItem : undefined,
       imageSelected : undefined,
+      submitButton : "Add to Cart",
+      submitFunction : this.handleSubmitClick,
+      itemsPresentInBill : [],
      }
   }
   handleBarcodeClick(id){
@@ -61,9 +64,10 @@ class App extends Component {
   //    because to show fraud detection cases) ,then update state.image and unhide Images component
 
   async handleSubmitClick() {
-    // this.addToCartButton.className += "hide"
-    // this.loadingButton.classList.remove("hide")
-    console.log(itemscsv)
+    this.setState({
+      submitButton : "Loading...",
+      submitFunction : undefined
+    })
     var barcodeCombinedOutput = []
     var imageName = undefined
     this.state.bill.forEach(billeditem=>{
@@ -73,17 +77,20 @@ class App extends Component {
     console.log(barcodeCombinedOutput)
     imageName = filenames[this.state.imageSelected].name
     var awsResult = await window["upload"](imageName)
-    // this.addToCartButton.classList.remove("hide")
-    // this.loadingButton.className += "hide"
+    this.setState({
+      submitButton : "Add to Cart",
+      submitFunction : this.handleSubmitClick
+    })
     console.log(awsResult)
     if(awsResult.sort().join(',')=== barcodeCombinedOutput.sort().join(',')){
-      alert('Items succesfully validated');
+      alert('Items succesfully validated. Place a new Item');
       for(let i=0;i<itemscsv.length;i++){
-        if(this.state.barcodeSelectedItem == itemscsv[i].id){
+        if(this.state.barcodeSelectedItem === itemscsv[i].id){
           this.setState((prevState)=>{
             return {
               ...prevState,
-              bill: [...prevState.bill, {key:itemscsv[i].key,name:itemscsv[i].name,price:itemscsv[i].price,id:itemscsv[i].id}]
+              bill: [...prevState.bill, {key:itemscsv[i].key,name:itemscsv[i].name,price:itemscsv[i].price,id:itemscsv[i].id}],
+              itemsPresentInBill : [...prevState.itemsPresentInBill, itemscsv[i].id]
             }
           },function(){
             console.log(this.state.bill)
@@ -91,24 +98,50 @@ class App extends Component {
           break;
         }
       }
+      var nextImages = await window["imageselector"](this.state.itemsPresentInBill)
+      console.log(nextImages)
+      this.setState((prevState)=>{
+        const barcodetemp = prevState.barcode.map(obj => {
+          if(nextImages[1].includes(obj.id))
+            return obj
+          else
+            return {
+              ...obj,
+              display: false
+            }
+        })
+        return {
+          ...prevState,
+          barcode: barcodetemp,
+          barcodeSelectedItem: undefined,
+          imageSelected : undefined,
+          images: nextImages[0],
+          dropDownTitle: "Items"
+        }
+      },function(){
+        console.log(this.state.barcode)
+      })
     }
     else 
       alert('Fraud Detected. Place again');
   }
-
+  changeTitle(e) {
+    this.setState({
+        dropDownTitle: e.currentTarget.textContent
+    })
+  }
   render() { 
     return ( 
       <Container fluid>
       <Row>
         <Col xs={3} className="barcode">
-            <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} />
+            <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} dropDownTitleProperty = {this.state.dropDownTitle} changeTitleFunction = {this.changeTitle}/>
         </Col>
         <Col className="images">
             <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick}/>
             {this.state.barcodeSelectedItem!==undefined && this.state.imageSelected!==undefined &&
               <div>
-              <Button className = "button" id="addtocart" onClick={this.handleSubmitClick} >Add to Cart</Button>
-              {/* <Button className = "button hide" id="loading">Loading..</Button> */}
+              <Button className = {this.state.addToCart} onClick={this.state.submitFunction} >{this.state.submitButton}</Button>
               </div>
             }
         </Col>

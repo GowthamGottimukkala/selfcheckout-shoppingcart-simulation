@@ -93,5 +93,35 @@
       return idlabels
     }
 
+    async function imageselector (items){
+    var fs = require('fs');
+    var files = fs.readdirSync('./src/images/')
+    console.log(files)
+    var answer = [[],[]]
+    for(let i=0;i<files.length;i++){
+        var imageName = files[i].split(".")[0];
+        itemsinfile = []
+
+        if(imageName.includes("+")){
+            itemsinfile = imageName.split("+")
+        }
+        else{
+            itemsinfile.push(imageName)
+        }
+        var test = items.every((item)=> itemsinfile.includes(item))
+        if(test){
+            extraitems = itemsinfile.filter( function( el ) {
+                return items.indexOf( el ) < 0;
+              } );
+            if(extraitems.length === 1){
+                answer[0].push(i)      
+                answer[1].push(extraitems[0])         
+            }
+        }
+    }
+    console.log(answer)
+    answer = await Promise.all(answer)
+    return answer
+}
   </script>
 </html>
