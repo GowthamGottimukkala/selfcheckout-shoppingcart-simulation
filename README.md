@@ -17,6 +17,4 @@ This is a simulation for the product we are making - a Self-checkout Shopping ca
 ### Run the app
 
 ```yarn start```
-### Build the app
 
-```yarn build```
