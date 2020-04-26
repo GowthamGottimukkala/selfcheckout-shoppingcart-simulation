@@ -31,6 +31,10 @@ class Bill extends Component {
                  <tbody>
                     {billItems}
                  </tbody>
+                 <tfoot>
+                   <br></br>
+                   Total = {this.props.totalBill}
+                 </tfoot>
             </Table>
             </div>
          );

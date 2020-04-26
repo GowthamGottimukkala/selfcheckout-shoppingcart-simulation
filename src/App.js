@@ -22,9 +22,10 @@ class App extends Component {
       images : [5,7,13,14],
       barcodeSelectedItem : undefined,
       imageSelected : undefined,
-      submitButton : "Add to Cart",
+      submitButton : "Start Validation",
       submitFunction : this.handleSubmitClick,
       itemsPresentInBill : [],
+      totalBill : 0
      }
   }
   handleBarcodeClick(id){
@@ -65,7 +66,7 @@ class App extends Component {
 
   async handleSubmitClick() {
     this.setState({
-      submitButton : "Loading...",
+      submitButton : "Validating..",
       submitFunction : undefined
     })
     var barcodeCombinedOutput = []
@@ -78,49 +79,88 @@ class App extends Component {
     imageName = filenames[this.state.imageSelected].name
     var awsResult = await window["upload"](imageName)
     this.setState({
-      submitButton : "Add to Cart",
+      submitButton : "Start Validation",
       submitFunction : this.handleSubmitClick
     })
     console.log(awsResult)
     if(awsResult.sort().join(',')=== barcodeCombinedOutput.sort().join(',')){
-      alert('Items succesfully validated. Place a new Item');
+      var keyValidated = undefined
       for(let i=0;i<itemscsv.length;i++){
         if(this.state.barcodeSelectedItem === itemscsv[i].id){
-          this.setState((prevState)=>{
-            return {
-              ...prevState,
-              bill: [...prevState.bill, {key:itemscsv[i].key,name:itemscsv[i].name,price:itemscsv[i].price,id:itemscsv[i].id}],
-              itemsPresentInBill : [...prevState.itemsPresentInBill, itemscsv[i].id]
-            }
-          },function(){
-            console.log(this.state.bill)
-          })
+          keyValidated = i
           break;
         }
       }
-      var nextImages = await window["imageselector"](this.state.itemsPresentInBill)
-      console.log(nextImages)
-      this.setState((prevState)=>{
-        const barcodetemp = prevState.barcode.map(obj => {
-          if(nextImages[1].includes(obj.id))
-            return obj
-          else
-            return {
-              ...obj,
-              display: false
-            }
-        })
+      this.setState(prevState => {
         return {
           ...prevState,
-          barcode: barcodetemp,
-          barcodeSelectedItem: undefined,
-          imageSelected : undefined,
-          images: nextImages[0],
-          dropDownTitle: "Items"
+          totalBill : prevState.totalBill + parseInt(itemscsv[keyValidated].price)
         }
-      },function(){
-        console.log(this.state.barcode)
       })
+      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") == true) {
+        this.setState((prevState)=>{
+          return {
+            ...prevState,
+            bill: [...prevState.bill, {key:itemscsv[keyValidated].key,name:itemscsv[keyValidated].name,price:itemscsv[keyValidated].price,id:itemscsv[keyValidated].id}],
+            itemsPresentInBill : [...prevState.itemsPresentInBill, itemscsv[keyValidated].id],
+          }
+        },function(){
+          console.log(this.state.bill)
+        })
+        var nextImages = await window["imageselector"](this.state.itemsPresentInBill)
+        console.log(nextImages)
+        this.setState((prevState)=>{
+          const barcodetemp = prevState.barcode.map(obj => {
+            if(nextImages[1].includes(obj.id))
+              return obj
+            else
+              return {
+                ...obj,
+                display: false
+              }
+          })
+          return {
+            ...prevState,
+            barcode: barcodetemp,
+            barcodeSelectedItem: undefined,
+            imageSelected : undefined,
+            images: nextImages[0],
+            dropDownTitle: "Items"
+          }
+        },function(){
+          console.log(this.state.barcode)
+          if(this.state.images.length === 0){
+            alert("All available items are added. Starting simulation again")
+            this.setState({
+              barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
+              dropDownTitle : "Items",
+              bill : [],
+              images : [5,7,13,14],
+              barcodeSelectedItem : undefined,
+              imageSelected : undefined,
+              submitButton : "Start Validation",
+              submitFunction : this.handleSubmitClick,
+              itemsPresentInBill : [],
+              totalBill : 0,
+            })
+          }
+        })
+      }
+       else {
+         alert("Checked out. Your total bill is " + this.state.totalBill + " . Starting simulation again")
+          this.setState({
+          barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
+          dropDownTitle : "Items",
+          bill : [],
+          images : [5,7,13,14],
+          barcodeSelectedItem : undefined,
+          imageSelected : undefined,
+          submitButton : "Start Validation",
+          submitFunction : this.handleSubmitClick,
+          itemsPresentInBill : [],
+          totalBill : 0,
+        })
+      }
     }
     else 
       alert('Fraud Detected. Place again');
@@ -149,9 +189,16 @@ class App extends Component {
               <Button className = {this.state.addToCart} onClick={this.state.submitFunction} >{this.state.submitButton}</Button>
               </div>
             }
+            {
+              this.state.submitButton==="Validating.." &&
+              <div style={{marginTop: 30}}>
+                <h6>This may take a few seconds</h6>
+                <h6>Validating using AWS custom object detection model</h6>
+              </div>
+            }
         </Col>
         <Col xs={3} className="bill">
-            <Bill billeditems = {this.state.bill}/>
+            <Bill billeditems = {this.state.bill} totalBill = {this.state.totalBill}/>
         </Col>
       </Row>
     </Container>    

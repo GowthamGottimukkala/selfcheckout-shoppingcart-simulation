@@ -29,7 +29,7 @@ class Images extends Component {
         })
         return ( 
             <div className="actualimages">
-                <h1>Select one image</h1>
+                <h1>Select the snapshot of the cart</h1>
                 <Container className="gallery">
                     {gallery}
                 </Container>
