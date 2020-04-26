@@ -124,6 +124,11 @@ class App extends Component {
     }
     else 
       alert('Fraud Detected. Place again');
+      this.setState({
+        barcodeSelectedItem : undefined,
+        imageSelected : undefined,
+        dropDownTitle : "Items"
+      })
   }
   changeTitle(e) {
     this.setState({
