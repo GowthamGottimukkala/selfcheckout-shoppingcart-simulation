@@ -49,7 +49,7 @@
   <script>
     async function upload (recimg){
       var AWS = require('aws-sdk');
-      AWS.config.update({region: 'us-east-2'});
+      AWS.config.loadFromPath('./src/config.json');
       s3 = new AWS.S3({apiVersion: '2006-03-01'});
       var uploadParams = {Bucket: "test-superkart", Key: '', Body: ''};
       var file = "./src/images/".concat(recimg);

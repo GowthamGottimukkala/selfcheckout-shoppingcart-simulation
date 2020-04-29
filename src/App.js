@@ -57,13 +57,6 @@ class App extends Component {
   })}
 }
 
-  // here we use the state.barcodeselecteditem and state.imageSelected to perform validation using AWS and weights then
-  // 1. Display "Success" or "Place again" and hide Images Component - Done
-  // 2. If "Success" Add state.bill with validated item - Done
-  // 3. If "Success" Update state.barcode.display for all items according to the images available
-  // 4. If "Success" Call the function to list all the available images having the items present in the bill (and state.selectedItem is not needed
-  //    because to show fraud detection cases) ,then update state.image and unhide Images component
-
   async handleSubmitClick() {
     this.setState({
       submitButton : "Validating..",
@@ -97,8 +90,8 @@ class App extends Component {
           totalBill : prevState.totalBill + parseInt(itemscsv[keyValidated].price)
         }
       })
-      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") == true) {
-        this.setState((prevState)=>{
+      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") === true) {
+        this.setState((prevState)=>{  
           return {
             ...prevState,
             bill: [...prevState.bill, {key:itemscsv[keyValidated].key,name:itemscsv[keyValidated].name,price:itemscsv[keyValidated].price,id:itemscsv[keyValidated].id}],
