@@ -168,12 +168,21 @@ class App extends Component {
         dropDownTitle: e.currentTarget.textContent
     })
   }
+  importAll(r) {
+    return r.keys().map(r);
+  }
   render() { 
+    const forapp = this.importAll(require.context('./forapp/', false));
     return ( 
       <Container fluid>
       <Row>
         <Col xs={3} className="barcode">
             <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} dropDownTitleProperty = {this.state.dropDownTitle} changeTitleFunction = {this.changeTitle}/>
+            <hr className= "line-barcode"></hr>
+            <div className="bottom">
+              <img src={forapp[0]}></img>
+              <h6>Here you scan the item you want to add into cart</h6>
+            </div>
         </Col>
         <Col className="images">
             <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick}/>
@@ -189,9 +198,18 @@ class App extends Component {
                 <h6>Validating using AWS custom object detection model</h6>
               </div>
             }
+            <hr className= "line"></hr>
+            <div className="bottom-images">
+              <h6>Here you can place any item (used to simulate our fraud detection strategies)</h6>
+              <h6>Above images are for simulation purposes only. In the actual product a single image is automatically obtained from the camera present in the cart after you place something</h6>
+            </div>
         </Col>
         <Col xs={3} className="bill">
             <Bill billeditems = {this.state.bill} totalBill = {this.state.totalBill}/>
+            <hr className= "line-bill"></hr>
+            <div className="bottom-bill">
+              <h6>This shows the current bill</h6>
+            </div>
         </Col>
       </Row>
     </Container>    

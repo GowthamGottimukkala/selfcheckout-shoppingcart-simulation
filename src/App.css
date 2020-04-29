@@ -5,12 +5,13 @@
 }
 
 .barcode{
-  
+  text-align: center;
 }
 .images{
   text-align: center;
 }
 .bill{
+  text-align: center;
   
 }
 
@@ -52,4 +53,42 @@ justify-content: center;
 
 .hide{
   visibility: hidden;
+}
+
+.bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 30px;
+}
+
+.line {
+  margin-top: 120px;
+  border-top: 1px solid black;
+}
+
+.line-barcode {
+  margin-top: 610px;
+  border-top: 1px solid black;
+}
+
+.line-bill {
+  margin-top: 533px;
+  border-top: 1px solid black;
+}
+.bottom-images {
+  position: absolute;
+  left: 200px;
+  right: 200px;
+  margin: auto;
+  bottom: 50px;
+}
+
+.bottom-bill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 80px;
 }
