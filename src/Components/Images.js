@@ -30,7 +30,7 @@ class Images extends Component {
         return ( 
             <div className="actualimages">
                 <h1>Select the snapshot of the cart</h1>
-                <Container className="gallery">
+                <Container className="gallery" id = {this.props.shouldHide ? 'hidden' : ''}>
                     {gallery}
                 </Container>
             </div>

@@ -25,7 +25,8 @@ class App extends Component {
       submitButton : "Start Validation",
       submitFunction : this.handleSubmitClick,
       itemsPresentInBill : [],
-      totalBill : 0
+      totalBill : 0,
+      shouldHide : false
      }
   }
   handleBarcodeClick(id){
@@ -59,6 +60,7 @@ class App extends Component {
 
   async handleSubmitClick() {
     this.setState({
+      shouldHide : true,
       submitButton : "Validating..",
       submitFunction : undefined
     })
@@ -73,6 +75,7 @@ class App extends Component {
     var awsResult = await window["upload"](imageName)
     this.setState({
       submitButton : "Start Validation",
+      shouldHide : false,
       submitFunction : this.handleSubmitClick
     })
     console.log(awsResult)
@@ -157,6 +160,10 @@ class App extends Component {
     }
     else 
       alert('Fraud Detected. Place again');
+      const elements = document.getElementsByClassName("imge")
+      for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.remove('clicked');
+       }
       this.setState({
         barcodeSelectedItem : undefined,
         imageSelected : undefined,
@@ -177,15 +184,14 @@ class App extends Component {
       <Container fluid>
       <Row>
         <Col xs={3} className="barcode">
-            <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} dropDownTitleProperty = {this.state.dropDownTitle} changeTitleFunction = {this.changeTitle}/>
-            <hr className= "line-barcode"></hr>
+            <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} dropDownTitleProperty = {this.state.dropDownTitle} changeTitleFunction = {this.changeTitle} shouldHide = {this.state.shouldHide}/>
             <div className="bottom">
               <img src={forapp[0]}></img>
               <h6>Here you scan the item you want to add into cart</h6>
             </div>
         </Col>
         <Col className="images">
-            <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick}/>
+            <Images imageFiles = {this.state.images} imageClickFunction = {this.handleImageClick} shouldHide = {this.state.shouldHide}/>
             {this.state.barcodeSelectedItem!==undefined && this.state.imageSelected!==undefined &&
               <div>
               <Button className = {this.state.addToCart} onClick={this.state.submitFunction} >{this.state.submitButton}</Button>
@@ -198,7 +204,6 @@ class App extends Component {
                 <h6>Validating using AWS custom object detection model</h6>
               </div>
             }
-            <hr className= "line"></hr>
             <div className="bottom-images">
               <h6>Here you can place any item (used to simulate our fraud detection strategies)</h6>
               <h6>Above images are for simulation purposes only. In the actual product a single image is automatically obtained from the camera present in the cart after you place something</h6>
@@ -206,7 +211,6 @@ class App extends Component {
         </Col>
         <Col xs={3} className="bill">
             <Bill billeditems = {this.state.bill} totalBill = {this.state.totalBill}/>
-            <hr className= "line-bill"></hr>
             <div className="bottom-bill">
               <h6>This shows the current bill</h6>
             </div>

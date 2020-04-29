@@ -17,7 +17,7 @@ class Barcode extends Component {
         return ( 
             <div className="actualbarcode">
                 <h1>Scan new item</h1>
-                <DropdownButton id="dropdown-basic-button" title={this.props.dropDownTitleProperty}>
+                <DropdownButton id="dropdown-basic-button" title={this.props.dropDownTitleProperty} id = {this.props.shouldHide ? 'hidden' : ''}>
                     {dropdownItems}
                 </DropdownButton>
             </div>

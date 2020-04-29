@@ -76,6 +76,7 @@ justify-content: center;
 .line-bill {
   margin-top: 533px;
   border-top: 1px solid black;
+  
 }
 .bottom-images {
   position: absolute;
@@ -91,4 +92,34 @@ justify-content: center;
   right: 0;
   margin: auto;
   bottom: 80px;
+}
+
+#hidden {
+  display: none;
+}
+
+@media screen and (max-width: 1400px) {
+.h6{
+  font-size: 0.5rem;
+}
+.imge {
+    width:  130px;
+    height: 130px;
+    object-fit: cover;
+    outline-style: solid;
+    margin: 1em;
+}
+
+.imge:hover{
+  width:  135px;
+  height: 135px;
+  outline-width: 8px;
+}
+.bottom-images {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  bottom: 50px;
+}
 }
