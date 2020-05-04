@@ -13,6 +13,8 @@ This is a simulation for the product we are making - a Self-checkout Shopping ca
 
 ### Install Dependencies
 
+```npm config set registry https://registry.npmjs.org/```
+
 ```yarn```
 ### Run the app
 
