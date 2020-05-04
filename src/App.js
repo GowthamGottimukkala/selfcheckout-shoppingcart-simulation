@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import './App.css';
 import Bill from './Components/Bill'
@@ -15,6 +16,7 @@ class App extends Component {
     this.handleImageClick = this.handleImageClick.bind(this);
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.changeTitle = this.changeTitle.bind(this);
+    this.handleCheckout = this.handleCheckout.bind(this);
     this.state = { 
       barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
       dropDownTitle : "Items",
@@ -26,7 +28,8 @@ class App extends Component {
       submitFunction : this.handleSubmitClick,
       itemsPresentInBill : [],
       totalBill : 0,
-      shouldHide : false
+      shouldHide : false,
+      checkOut : undefined,
      }
   }
   handleBarcodeClick(id){
@@ -93,17 +96,16 @@ class App extends Component {
           totalBill : prevState.totalBill + parseInt(itemscsv[keyValidated].price)
         }
       })
-      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") === true) {
-        this.setState((prevState)=>{  
-          return {
-            ...prevState,
-            bill: [...prevState.bill, {key:itemscsv[keyValidated].key,name:itemscsv[keyValidated].name,price:itemscsv[keyValidated].price,id:itemscsv[keyValidated].id}],
-            itemsPresentInBill : [...prevState.itemsPresentInBill, itemscsv[keyValidated].id],
-          }
-        },function(){
-          console.log(this.state.bill)
-        })
-        var nextImages = await window["imageselector"](this.state.itemsPresentInBill)
+      this.setState((prevState)=>{  
+        return {
+          ...prevState,
+          bill: [...prevState.bill, {key:itemscsv[keyValidated].key,name:itemscsv[keyValidated].name,price:itemscsv[keyValidated].price,id:itemscsv[keyValidated].id}],
+          itemsPresentInBill : [...prevState.itemsPresentInBill, itemscsv[keyValidated].id],
+        }
+      },function(){
+        console.log(this.state.bill)
+      })
+      var nextImages = await window["imageselector"](this.state.itemsPresentInBill)
         console.log(nextImages)
         this.setState((prevState)=>{
           const barcodetemp = prevState.barcode.map(obj => {
@@ -141,21 +143,11 @@ class App extends Component {
             })
           }
         })
-      }
-       else {
-         alert("Checked out. Your total bill is " + this.state.totalBill + " . Starting simulation again")
+      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") !== true) {
           this.setState({
-          barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
-          dropDownTitle : "Items",
-          bill : [],
-          images : [5,7,13,14],
-          barcodeSelectedItem : undefined,
-          imageSelected : undefined,
-          submitButton : "Start Validation",
-          submitFunction : this.handleSubmitClick,
-          itemsPresentInBill : [],
-          totalBill : 0,
-        })
+            checkOut : "checkout",
+            shouldHide : true
+          })
       }
     }
     else 
@@ -178,6 +170,23 @@ class App extends Component {
   importAll(r) {
     return r.keys().map(r);
   }
+  handleCheckout(){
+    this.setState({
+      barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
+      dropDownTitle : "Items",
+      bill : [],
+      images : [5,7,13,14],
+      barcodeSelectedItem : undefined,
+      imageSelected : undefined,
+      submitButton : "Start Validation",
+      submitFunction : this.handleSubmitClick,
+      itemsPresentInBill : [],
+      totalBill : 0,
+      checkOut : undefined,
+      shouldHide : false,
+    })
+  }
+
   render() { 
     const forapp = this.importAll(require.context('./forapp/', false));
     return ( 
@@ -211,6 +220,13 @@ class App extends Component {
         </Col>
         <Col xs={3} className="bill">
             <Bill billeditems = {this.state.bill} totalBill = {this.state.totalBill}/>
+            {
+              this.state.checkOut==="checkout" &&
+              <div>
+              <h6 style = {{marginBottom: 10}}>Total bill is {this.state.totalBill}</h6>
+              <Button className = {this.state.addToCart} onClick={this.handleCheckout} >Start again</Button>
+              </div>
+            }
             <div className="bottom-bill">
               <h6>This shows the current bill</h6>
             </div>

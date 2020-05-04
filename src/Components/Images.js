@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 import '../App.css';
@@ -28,7 +29,7 @@ class Images extends Component {
             return <img key= {id} className="imge" src={images[id]} onClick = {(e)=>{this.changeCSS(e); this.props.imageClickFunction(id)}} />;
         })
         return ( 
-            <div className="actualimages">
+            <div className="actualimages" id = {this.props.shouldHide ? 'blur' : ''}>
                 <h1>Select the snapshot of the cart</h1>
                 <Container className="gallery" id = {this.props.shouldHide ? 'hidden' : ''}>
                     {gallery}
