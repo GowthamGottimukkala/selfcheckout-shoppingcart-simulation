@@ -73,7 +73,7 @@
       var rekognition = new AWS.Rekognition();
       var bucket="simulation-superkart"
       var model='arn:aws:rekognition:us-east-1:366640010633:project/torque/version/torque.2020-06-17T23.43.18/1592417598684'
-      var min_confidence=45
+      var min_confidence=55
       var params = {
           Image: {'S3Object': {'Bucket': bucket, 'Name': uploadParams.Key}},
               MinConfidence: min_confidence,
