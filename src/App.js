@@ -30,6 +30,7 @@ class App extends Component {
       totalBill : 0,
       shouldHide : false,
       checkOut : undefined,
+      dialogbox : true,
      }
   }
   handleBarcodeClick(id){
@@ -128,30 +129,29 @@ class App extends Component {
         },function(){
           console.log(this.state.barcode)
           if(this.state.images.length === 0){
-            alert("All available items are added. Starting simulation again")
             this.setState({
-              barcode : [{id:'fogg',name:'Fogg Bodyspray',display:true},{id:'medimix',name:'Medimix soap',display:true}, {id:"redlabel",name:'3roses Teapowder',display:true}, {id:"goodday",name:'Goodday Buttercookies',display:true}],
-              dropDownTitle : "Items",
-              bill : [],
-              images : [5,7,13,14],
-              barcodeSelectedItem : undefined,
-              imageSelected : undefined,
-              submitButton : "Start Validation",
-              submitFunction : this.handleSubmitClick,
-              itemsPresentInBill : [],
-              totalBill : 0,
+              checkOut : "checkout",
+              shouldHide : true
+            }, function(){
+              console.log("All items are completed. Need to start simulation again")
+              alert("All items are completed. Need to start simulation again")
             })
           }
         })
-      if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") !== true) {
-          this.setState({
-            checkOut : "checkout",
-            shouldHide : true
-          })
+      if(this.state.checkOut != "checkout"){
+         if (window.confirm("\t\t\tItem successfully validated and added to Bill.\t\t\t \n\n If you want to continue adding items press OK or If u want to checkout press cancel") !== true) {
+             this.setState({
+               checkOut : "checkout",
+               shouldHide : true
+             })
+         }
       }
     }
-    else 
+    else {
+      console.log(this.state.imageSelected)
       alert('Fraud Detected. Place again');
+
+    }
       const elements = document.getElementsByClassName("imge")
       for (var i = 0; i < elements.length; i++) {
           elements[i].classList.remove('clicked');
@@ -186,11 +186,20 @@ class App extends Component {
       shouldHide : false,
     })
   }
-
+  handleDialogBox(){
+    this.setState({
+      dialogbox : false
+  })
+  }
   render() { 
     const forapp = this.importAll(require.context('./forapp/', false));
     return ( 
       <Container fluid>
+        {this.state.dialogbox == true &&
+          (window.confirm("\t\t\tPlease read this information before proceeding!\n----------------------------------------------------------------------------------------------------------------------------\n\n--This is a simulation for a self-checkout shopping cart.\n\n--The 3 inputs label-from-barcode-scanner, Snapshot-of-cart, Weight-of-cart are being taken from the user in this simulation.\n\n----In 1st option, you will be asked to choose the label which is the object-scanned.\n\n----In the 2nd option, you will be asked to choose the snapshot-of-cart which is the object-placed.\n\n----The weight of the cart is also sent as you choose your option2. The bill is displayed in a separate container on your right in real-time.")) &&
+             this.handleDialogBox()
+        }
+        
       <Row>
         <Col xs={3} className="barcode">
             <Barcode availableitems = {this.state.barcode} barcodeClickFunction = {this.handleBarcodeClick} dropDownTitleProperty = {this.state.dropDownTitle} changeTitleFunction = {this.changeTitle} shouldHide = {this.state.shouldHide}/>
@@ -223,7 +232,7 @@ class App extends Component {
             {
               this.state.checkOut==="checkout" &&
               <div>
-              <h6 style = {{marginBottom: 10}}>Total bill is {this.state.totalBill}</h6>
+              <h6 style = {{marginBottom: 10, fontWeight: "bolder"}}>Total bill is {this.state.totalBill}</h6>
               <Button className = {this.state.addToCart} onClick={this.handleCheckout} >Start again</Button>
               </div>
             }
